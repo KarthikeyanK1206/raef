@@ -30,6 +30,7 @@ dev = [
   "pytest>=8.0",
   "ruff>=0.6",
   "mypy>=1.0",
+  "types-requests>=2.31",  # stubs for recovery.health.http_checker
 ]
 
 [project.scripts]
