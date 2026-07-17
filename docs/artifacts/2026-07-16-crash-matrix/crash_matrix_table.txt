@@ -1,0 +1,11 @@
+phase                        step attempts intr commits dup classification             recovery_ms resume_ms result   
+----------------------------------------------------------------------------------------------------------------------
+after_step_started              0        3    1       1   0 committed_after_restart          6.611     108.7 ok       
+before_agent_turn               0        3    1       1   0 committed_after_restart          6.430     108.8 ok       
+after_agent_turn                0        3    1       1   0 committed_after_restart          5.695     105.2 ok       
+after_record_llm_turn           0        3    1       1   0 committed_after_restart          5.548     107.3 ok       
+before_tool_transaction         0        3    1       1   0 committed_after_restart          6.005     106.7 ok       
+after_tool_transaction          0        3    1       1   0 reused_committed_result          3.336      93.7 ok       
+after_recovery                  0        3    1       1   0 reused_committed_result          7.423      91.7 ok       
+after_advance_plan_item         0        2    1       1   0 reused_committed_result          5.842      76.5 ok       
+after_record_final_message      1        3    1       1   0 reused_committed_result          6.244      75.0 ok       

@@ -1,0 +1,15 @@
+demo 1 (hard crash)
+  executions:     [('apply-action', 'ok', 'acked')]
+  pending after:  []
+  target commits: 1
+  order state:    {'flight_no': 'RA512', 'status': 'booked'}
+demo 2 (ambiguous: response lost)
+  executions:     [('apply-action', 'ok', 'verified_committed')]
+  pending after:  []
+  target commits: 1
+  order state:    {'flight_no': 'RA512', 'status': 'booked'}
+demo 3 (ambiguous: request lost)
+  executions:     [('apply-action', 'ok', 'acked')]
+  pending after:  []
+  target commits: 1
+  order state:    {'flight_no': 'RA512', 'status': 'booked'}

@@ -1,0 +1,11 @@
+completed_step_duration_ms  :       50.095 ms
+llm_generate                :        2.837 ms  count=3
+recovery                    :        5.775 ms  count=1
+tool_transaction            :       13.918 ms  count=2
+record_llm_turn             :        8.767 ms  count=2
+advance_plan_item           :        8.775 ms  count=2
+record_final_message        :        4.843 ms  count=1
+
+step 0 attempt 1: interrupted        19.281 ms
+step 0 attempt 2: succeeded          18.940 ms
+step 1 attempt 1: succeeded          11.874 ms

@@ -1,0 +1,46 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.12", "3.13"]
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install package with dev tools
+        run: python -m pip install -e '.[dev]'
+
+      - name: Lint
+        run: ruff check .
+
+      - name: Type-check
+        run: mypy src
+
+      - name: Unit and integration tests
+        run: pytest -q
+
+      # The crash/recovery demos are mock-only (no network, no API keys), so
+      # CI can exercise the real restart-and-recover paths end to end.
+      - name: Crash/recovery demo (process kill + replay)
+        run: python example/crash_recovery_e2e.py --clean --runtime-dir data/ci_crash
+
+      - name: Ambiguous-write demo (verify committed, reuse result)
+        run: python example/crash_recovery_e2e.py --clean --runtime-dir data/ci_ambiguous --simulate-ambiguous-write
+
+      - name: Lost-write demo (verify absent, replay safely)
+        run: python example/crash_recovery_e2e.py --clean --runtime-dir data/ci_lost --simulate-lost-write
+
+      - name: Crash matrix (all nine phases, exactly one commit each)
+        run: python example/crash_recovery_e2e.py --sweep-crash-phases --sweep-root data/ci_crash_matrix

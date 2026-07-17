@@ -1,0 +1,45 @@
+$ raef --data-root data/demo_ambiguous runs
+sample-openrouter-mock-crash-e2e-1784247966  seq=30  pending=0  plan[done=1]
+
+$ raef --data-root data/demo_ambiguous show sample-openrouter-mock-crash-e2e-1784247966
+run: sample-openrouter-mock-crash-e2e-1784247966
+latest_seq: 30
+checkpoint: seq=29 type=agent_context
+plan (version 6):
+  [done        ] step_0     Book the selected flight
+messages: 5
+pending executions: none
+events after checkpoint: 1
+
+$ raef --data-root data/demo_ambiguous executions sample-openrouter-mock-crash-e2e-1784247966
+exec_f3e90c6bd8009dda010585a0  apply-action   WRITE  ok       verified_committed  
+
+$ raef --data-root data/demo_ambiguous events sample-openrouter-mock-crash-e2e-1784247966 (tail)
+    25  2026-07-17T00:26:07.126385+00:00  CHECKPOINT_WRITTEN               bf641483-8af5-48ae-b691-9f931a828123
+    26  2026-07-17T00:26:07.133233+00:00  CONTEXT_MESSAGE_APPENDED         sample-openrouter-mock-crash-e2e-1784247966
+    27  2026-07-17T00:26:07.137741+00:00  PLAN_ITEM_STATUS_UPDATED         step_0
+    28  2026-07-17T00:26:07.137890+00:00  CONTEXT_SYNCHRONIZED             sample-openrouter-mock-crash-e2e-1784247966
+    29  2026-07-17T00:26:07.138144+00:00  CHECKPOINT_WRITTEN               f056aec4-17c9-4947-a869-c56ec5504d43
+    30  2026-07-17T00:26:07.142747+00:00  CHECKPOINT_WRITTEN               b6052ee6-c7e6-4005-af99-d19a0a08197a
+
+$ raef --data-root data/demo_ambiguous report sample-openrouter-mock-crash-e2e-1784247966
+run: sample-openrouter-mock-crash-e2e-1784247966
+spans: 14
+completed step duration: 43.017 ms
+  advance_plan_item               9.513 ms
+  llm_generate                    1.789 ms
+  record_final_message            4.090 ms
+  record_llm_turn                 4.817 ms
+  recovery                        5.662 ms
+  tool_transaction               12.799 ms
+step 0 attempt 1: interrupted        16.001 ms
+step 0 attempt 2: succeeded          15.991 ms
+step 1 attempt 1: succeeded          11.025 ms
+
+$ raef --data-root data/demo_ambiguous recover sample-openrouter-mock-crash-e2e-1784247966 --dry-run
+exec_f3e90c6bd8009dda010585a0  mark_committed             execution already committed
+
+$ raef --data-root data/demo_ambiguous audit sample-openrouter-mock-crash-e2e-1784247966
+run: sample-openrouter-mock-crash-e2e-1784247966
+executions: 1  intent events: 1
+audit ok: log-first invariants hold

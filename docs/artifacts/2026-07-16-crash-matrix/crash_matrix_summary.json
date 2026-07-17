@@ -1,0 +1,340 @@
+{
+  "command": "crash_recovery_e2e.py --sweep-crash-phases --clean",
+  "expected_commits_per_run": 1,
+  "generated_at": "2026-07-17T06:23:30.843268+00:00",
+  "machine": "arm64",
+  "ok": true,
+  "phase_count": 9,
+  "phases": [
+    {
+      "attempts": [
+        {
+          "attempt_no": 1,
+          "status": "interrupted",
+          "step_index": 0
+        },
+        {
+          "attempt_no": 2,
+          "status": "succeeded",
+          "step_index": 0
+        },
+        {
+          "attempt_no": 1,
+          "status": "succeeded",
+          "step_index": 1
+        }
+      ],
+      "classification": "committed_after_restart",
+      "commits_before_restart": 0,
+      "crash_exit_code": 42,
+      "crash_phase": "after_step_started",
+      "crash_step": 0,
+      "duplicate_commits": 0,
+      "execution_statuses": [
+        "apply-action:acked"
+      ],
+      "expected_commits": 1,
+      "interrupted_attempts": 1,
+      "ok": true,
+      "order_booked": true,
+      "recovery_phase_ms": 6.611,
+      "resume_exit_code": 0,
+      "resume_wall_ms": 108.739,
+      "runtime_dir": "data/crash_matrix/00_after_step_started",
+      "target_commits": 1
+    },
+    {
+      "attempts": [
+        {
+          "attempt_no": 1,
+          "status": "interrupted",
+          "step_index": 0
+        },
+        {
+          "attempt_no": 2,
+          "status": "succeeded",
+          "step_index": 0
+        },
+        {
+          "attempt_no": 1,
+          "status": "succeeded",
+          "step_index": 1
+        }
+      ],
+      "classification": "committed_after_restart",
+      "commits_before_restart": 0,
+      "crash_exit_code": 42,
+      "crash_phase": "before_agent_turn",
+      "crash_step": 0,
+      "duplicate_commits": 0,
+      "execution_statuses": [
+        "apply-action:acked"
+      ],
+      "expected_commits": 1,
+      "interrupted_attempts": 1,
+      "ok": true,
+      "order_booked": true,
+      "recovery_phase_ms": 6.43,
+      "resume_exit_code": 0,
+      "resume_wall_ms": 108.792,
+      "runtime_dir": "data/crash_matrix/01_before_agent_turn",
+      "target_commits": 1
+    },
+    {
+      "attempts": [
+        {
+          "attempt_no": 1,
+          "status": "interrupted",
+          "step_index": 0
+        },
+        {
+          "attempt_no": 2,
+          "status": "succeeded",
+          "step_index": 0
+        },
+        {
+          "attempt_no": 1,
+          "status": "succeeded",
+          "step_index": 1
+        }
+      ],
+      "classification": "committed_after_restart",
+      "commits_before_restart": 0,
+      "crash_exit_code": 42,
+      "crash_phase": "after_agent_turn",
+      "crash_step": 0,
+      "duplicate_commits": 0,
+      "execution_statuses": [
+        "apply-action:acked"
+      ],
+      "expected_commits": 1,
+      "interrupted_attempts": 1,
+      "ok": true,
+      "order_booked": true,
+      "recovery_phase_ms": 5.695,
+      "resume_exit_code": 0,
+      "resume_wall_ms": 105.174,
+      "runtime_dir": "data/crash_matrix/02_after_agent_turn",
+      "target_commits": 1
+    },
+    {
+      "attempts": [
+        {
+          "attempt_no": 1,
+          "status": "interrupted",
+          "step_index": 0
+        },
+        {
+          "attempt_no": 2,
+          "status": "succeeded",
+          "step_index": 0
+        },
+        {
+          "attempt_no": 1,
+          "status": "succeeded",
+          "step_index": 1
+        }
+      ],
+      "classification": "committed_after_restart",
+      "commits_before_restart": 0,
+      "crash_exit_code": 42,
+      "crash_phase": "after_record_llm_turn",
+      "crash_step": 0,
+      "duplicate_commits": 0,
+      "execution_statuses": [
+        "apply-action:acked"
+      ],
+      "expected_commits": 1,
+      "interrupted_attempts": 1,
+      "ok": true,
+      "order_booked": true,
+      "recovery_phase_ms": 5.548,
+      "resume_exit_code": 0,
+      "resume_wall_ms": 107.3,
+      "runtime_dir": "data/crash_matrix/03_after_record_llm_turn",
+      "target_commits": 1
+    },
+    {
+      "attempts": [
+        {
+          "attempt_no": 1,
+          "status": "interrupted",
+          "step_index": 0
+        },
+        {
+          "attempt_no": 2,
+          "status": "succeeded",
+          "step_index": 0
+        },
+        {
+          "attempt_no": 1,
+          "status": "succeeded",
+          "step_index": 1
+        }
+      ],
+      "classification": "committed_after_restart",
+      "commits_before_restart": 0,
+      "crash_exit_code": 42,
+      "crash_phase": "before_tool_transaction",
+      "crash_step": 0,
+      "duplicate_commits": 0,
+      "execution_statuses": [
+        "apply-action:acked"
+      ],
+      "expected_commits": 1,
+      "interrupted_attempts": 1,
+      "ok": true,
+      "order_booked": true,
+      "recovery_phase_ms": 6.005,
+      "resume_exit_code": 0,
+      "resume_wall_ms": 106.69,
+      "runtime_dir": "data/crash_matrix/04_before_tool_transaction",
+      "target_commits": 1
+    },
+    {
+      "attempts": [
+        {
+          "attempt_no": 1,
+          "status": "interrupted",
+          "step_index": 0
+        },
+        {
+          "attempt_no": 2,
+          "status": "succeeded",
+          "step_index": 0
+        },
+        {
+          "attempt_no": 1,
+          "status": "succeeded",
+          "step_index": 1
+        }
+      ],
+      "classification": "reused_committed_result",
+      "commits_before_restart": 1,
+      "crash_exit_code": 42,
+      "crash_phase": "after_tool_transaction",
+      "crash_step": 0,
+      "duplicate_commits": 0,
+      "execution_statuses": [
+        "apply-action:acked"
+      ],
+      "expected_commits": 1,
+      "interrupted_attempts": 1,
+      "ok": true,
+      "order_booked": true,
+      "recovery_phase_ms": 3.336,
+      "resume_exit_code": 0,
+      "resume_wall_ms": 93.664,
+      "runtime_dir": "data/crash_matrix/05_after_tool_transaction",
+      "target_commits": 1
+    },
+    {
+      "attempts": [
+        {
+          "attempt_no": 1,
+          "status": "interrupted",
+          "step_index": 0
+        },
+        {
+          "attempt_no": 2,
+          "status": "succeeded",
+          "step_index": 0
+        },
+        {
+          "attempt_no": 1,
+          "status": "succeeded",
+          "step_index": 1
+        }
+      ],
+      "classification": "reused_committed_result",
+      "commits_before_restart": 1,
+      "crash_exit_code": 42,
+      "crash_phase": "after_recovery",
+      "crash_step": 0,
+      "duplicate_commits": 0,
+      "execution_statuses": [
+        "apply-action:acked"
+      ],
+      "expected_commits": 1,
+      "interrupted_attempts": 1,
+      "ok": true,
+      "order_booked": true,
+      "recovery_phase_ms": 7.423,
+      "resume_exit_code": 0,
+      "resume_wall_ms": 91.683,
+      "runtime_dir": "data/crash_matrix/06_after_recovery",
+      "target_commits": 1
+    },
+    {
+      "attempts": [
+        {
+          "attempt_no": 1,
+          "status": "interrupted",
+          "step_index": 0
+        },
+        {
+          "attempt_no": 1,
+          "status": "succeeded",
+          "step_index": 1
+        }
+      ],
+      "classification": "reused_committed_result",
+      "commits_before_restart": 1,
+      "crash_exit_code": 42,
+      "crash_phase": "after_advance_plan_item",
+      "crash_step": 0,
+      "duplicate_commits": 0,
+      "execution_statuses": [
+        "apply-action:acked"
+      ],
+      "expected_commits": 1,
+      "interrupted_attempts": 1,
+      "ok": true,
+      "order_booked": true,
+      "recovery_phase_ms": 5.842,
+      "resume_exit_code": 0,
+      "resume_wall_ms": 76.494,
+      "runtime_dir": "data/crash_matrix/07_after_advance_plan_item",
+      "target_commits": 1
+    },
+    {
+      "attempts": [
+        {
+          "attempt_no": 1,
+          "status": "succeeded",
+          "step_index": 0
+        },
+        {
+          "attempt_no": 1,
+          "status": "interrupted",
+          "step_index": 1
+        },
+        {
+          "attempt_no": 2,
+          "status": "succeeded",
+          "step_index": 1
+        }
+      ],
+      "classification": "reused_committed_result",
+      "commits_before_restart": 1,
+      "crash_exit_code": 42,
+      "crash_phase": "after_record_final_message",
+      "crash_step": 1,
+      "duplicate_commits": 0,
+      "execution_statuses": [
+        "apply-action:acked"
+      ],
+      "expected_commits": 1,
+      "interrupted_attempts": 1,
+      "ok": true,
+      "order_booked": true,
+      "recovery_phase_ms": 6.244000000000001,
+      "resume_exit_code": 0,
+      "resume_wall_ms": 74.975,
+      "runtime_dir": "data/crash_matrix/08_after_record_final_message",
+      "target_commits": 1
+    }
+  ],
+  "platform": "macOS-26.5.1-arm64-arm-64bit-Mach-O",
+  "python_version": "3.13.13"
+}

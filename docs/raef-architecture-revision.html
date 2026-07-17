@@ -1,0 +1,930 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RAEF — Architecture & Interview Revision</title>
+<style>
+  :root {
+    --ground: #F5F7F5;
+    --surface: #FFFFFF;
+    --ink: #1E2823;
+    --muted: #5C6B62;
+    --line: #D8E0DA;
+    --accent: #1E6B4E;
+    --accent-soft: #E4EFE8;
+    --code-bg: #EEF2EE;
+    --ok: #2E7D4F;
+    --warn: #9A6A0B;
+    --bad: #B23F38;
+    --serif: "Iowan Old Style", "Palatino Nova", Palatino, "Book Antiqua", Georgia, serif;
+    --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    --mono: ui-monospace, "SF Mono", "Cascadia Code", Menlo, Consolas, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --ground: #121815;
+      --surface: #1A211D;
+      --ink: #E3EBE5;
+      --muted: #94A499;
+      --line: #2C3630;
+      --accent: #5BB28C;
+      --accent-soft: #21332A;
+      --code-bg: #161D19;
+      --ok: #57B47F;
+      --warn: #D9A03E;
+      --bad: #E07B72;
+    }
+  }
+  :root[data-theme="dark"] {
+    --ground: #121815;
+    --surface: #1A211D;
+    --ink: #E3EBE5;
+    --muted: #94A499;
+    --line: #2C3630;
+    --accent: #5BB28C;
+    --accent-soft: #21332A;
+    --code-bg: #161D19;
+    --ok: #57B47F;
+    --warn: #D9A03E;
+    --bad: #E07B72;
+  }
+  :root[data-theme="light"] {
+    --ground: #F5F7F5;
+    --surface: #FFFFFF;
+    --ink: #1E2823;
+    --muted: #5C6B62;
+    --line: #D8E0DA;
+    --accent: #1E6B4E;
+    --accent-soft: #E4EFE8;
+    --code-bg: #EEF2EE;
+    --ok: #2E7D4F;
+    --warn: #9A6A0B;
+    --bad: #B23F38;
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+  body {
+    margin: 0;
+    background: var(--ground);
+    color: var(--ink);
+    font-family: var(--serif);
+    font-size: 17px;
+    line-height: 1.65;
+  }
+
+  nav {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: var(--surface);
+    border-bottom: 1px solid var(--line);
+    overflow-x: auto;
+  }
+  nav .rail {
+    display: flex;
+    gap: 1.4rem;
+    align-items: baseline;
+    max-width: 1020px;
+    margin: 0 auto;
+    padding: 0.65rem 1.25rem;
+    white-space: nowrap;
+  }
+  nav .wordmark {
+    font-family: var(--mono);
+    font-weight: 700;
+    font-size: 0.85rem;
+    color: var(--accent);
+    letter-spacing: 0.08em;
+  }
+  nav a {
+    font-family: var(--sans);
+    font-size: 0.78rem;
+    letter-spacing: 0.02em;
+    color: var(--muted);
+    text-decoration: none;
+  }
+  nav a:hover, nav a:focus-visible { color: var(--accent); }
+  a:focus-visible, summary:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
+
+  .page {
+    max-width: 1020px;
+    margin: 0 auto;
+    padding: 2.5rem 1.25rem 5rem;
+  }
+  .prose { max-width: 76ch; }
+
+  header.doc h1 {
+    font-size: clamp(1.9rem, 4.5vw, 2.75rem);
+    line-height: 1.15;
+    margin: 0 0 0.5rem;
+    text-wrap: balance;
+    font-weight: 600;
+  }
+  header.doc .thesis {
+    font-size: 1.12rem;
+    color: var(--muted);
+    max-width: 62ch;
+    margin: 0 0 1.5rem;
+    text-wrap: balance;
+  }
+  .meta-strip {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0;
+    border: 1px solid var(--line);
+    background: var(--surface);
+    font-family: var(--sans);
+  }
+  .meta-strip > div {
+    padding: 0.7rem 1.1rem;
+    border-right: 1px solid var(--line);
+    flex: 1 1 130px;
+  }
+  .meta-strip > div:last-child { border-right: none; }
+  .meta-strip .k {
+    font-size: 0.68rem;
+    text-transform: uppercase;
+    letter-spacing: 0.09em;
+    color: var(--muted);
+    display: block;
+  }
+  .meta-strip .v {
+    font-family: var(--mono);
+    font-size: 0.95rem;
+    font-variant-numeric: tabular-nums;
+  }
+
+  section { margin-top: 3.5rem; }
+  .eyebrow {
+    font-family: var(--sans);
+    font-size: 0.72rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--accent);
+    margin: 0 0 0.35rem;
+  }
+  h2 {
+    font-size: 1.65rem;
+    font-weight: 600;
+    margin: 0 0 1rem;
+    text-wrap: balance;
+  }
+  h3 {
+    font-size: 1.15rem;
+    font-weight: 600;
+    margin: 1.8rem 0 0.6rem;
+  }
+  p { margin: 0 0 1rem; }
+  ul, ol { margin: 0 0 1rem; padding-left: 1.4rem; }
+  li { margin-bottom: 0.45rem; }
+  strong { font-weight: 650; }
+
+  code {
+    font-family: var(--mono);
+    font-size: 0.86em;
+    background: var(--code-bg);
+    border: 1px solid var(--line);
+    border-radius: 3px;
+    padding: 0.08em 0.35em;
+  }
+  pre {
+    background: var(--code-bg);
+    border: 1px solid var(--line);
+    padding: 0.9rem 1.1rem;
+    overflow-x: auto;
+    font-family: var(--mono);
+    font-size: 0.82rem;
+    line-height: 1.55;
+    margin: 0 0 1rem;
+  }
+  pre code { background: none; border: none; padding: 0; font-size: inherit; }
+  pre .c { color: var(--muted); }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    font-size: 0.92rem;
+    margin: 0 0 1rem;
+  }
+  .table-wrap { overflow-x: auto; margin: 0 0 1rem; }
+  .table-wrap table { margin: 0; min-width: 640px; }
+  th {
+    font-family: var(--sans);
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+    text-align: left;
+    padding: 0.55rem 0.9rem;
+    border-bottom: 1px solid var(--line);
+  }
+  td {
+    padding: 0.55rem 0.9rem;
+    border-bottom: 1px solid var(--line);
+    vertical-align: top;
+  }
+  tr:last-child td { border-bottom: none; }
+  td code { white-space: nowrap; }
+
+  .chip {
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    padding: 0.12em 0.5em;
+    border-radius: 999px;
+    border: 1px solid;
+    white-space: nowrap;
+  }
+  .chip.ok   { color: var(--ok);   border-color: var(--ok);   }
+  .chip.warn { color: var(--warn); border-color: var(--warn); }
+  .chip.bad  { color: var(--bad);  border-color: var(--bad);  }
+  .chip.n    { color: var(--muted); border-color: var(--line); }
+
+  .callout {
+    background: var(--accent-soft);
+    border-left: 3px solid var(--accent);
+    padding: 0.9rem 1.2rem;
+    margin: 0 0 1rem;
+  }
+  .callout p:last-child { margin-bottom: 0; }
+
+  /* Layered architecture diagram */
+  .arch { display: grid; gap: 0.55rem; margin: 1.2rem 0; font-family: var(--sans); }
+  .arch .tier {
+    display: grid;
+    gap: 0.55rem;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  }
+  .arch .node {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    padding: 0.65rem 0.85rem;
+  }
+  .arch .node.canon { border-color: var(--accent); border-width: 1.5px; }
+  .arch .node .t {
+    font-family: var(--mono);
+    font-size: 0.8rem;
+    font-weight: 700;
+    display: block;
+  }
+  .arch .node .d {
+    font-size: 0.78rem;
+    color: var(--muted);
+    line-height: 1.45;
+  }
+  .arch .flow {
+    text-align: center;
+    color: var(--muted);
+    font-size: 0.85rem;
+    line-height: 1;
+    padding: 0.1rem 0;
+  }
+  .arch .flow em {
+    font-style: normal;
+    font-family: var(--sans);
+    font-size: 0.7rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 0 0.6rem;
+  }
+
+  /* State machine */
+  .sm {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    align-items: center;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    padding: 1.1rem;
+    margin: 0 0 0.6rem;
+    font-family: var(--mono);
+    font-size: 0.8rem;
+  }
+  .sm .st {
+    border: 1.5px solid var(--muted);
+    padding: 0.3em 0.7em;
+    border-radius: 4px;
+    white-space: nowrap;
+  }
+  .sm .st.start { border-style: dashed; }
+  .sm .st.good { border-color: var(--ok); color: var(--ok); font-weight: 700; }
+  .sm .st.hold { border-color: var(--warn); color: var(--warn); }
+  .sm .st.dead { border-color: var(--bad); color: var(--bad); }
+  .sm .arrow { color: var(--muted); }
+  .sm .lbl {
+    font-family: var(--sans);
+    font-size: 0.68rem;
+    color: var(--muted);
+    letter-spacing: 0.03em;
+  }
+  .sm-row { display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center; width: 100%; }
+
+  .grid-2 {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1rem;
+    margin: 0 0 1rem;
+  }
+  .panel {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    padding: 1.1rem 1.3rem;
+  }
+  .panel h4 {
+    font-family: var(--sans);
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin: 0 0 0.7rem;
+  }
+  .panel.good h4 { color: var(--ok); }
+  .panel.risk h4 { color: var(--warn); }
+  .panel ul { margin-bottom: 0; font-size: 0.95rem; }
+
+  /* Decision cards */
+  .decision {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-top: 3px solid var(--accent);
+    padding: 1.1rem 1.3rem;
+    margin: 0 0 1rem;
+  }
+  .decision h3 { margin: 0 0 0.5rem; font-size: 1.05rem; }
+  .decision .row { font-size: 0.95rem; margin-bottom: 0.5rem; }
+  .decision .row:last-child { margin-bottom: 0; }
+  .decision .tag {
+    font-family: var(--sans);
+    font-size: 0.68rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+    display: inline-block;
+    min-width: 7.5em;
+  }
+
+  /* Q&A */
+  .qa-topic {
+    font-family: var(--sans);
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.11em;
+    color: var(--accent);
+    margin: 2rem 0 0.6rem;
+  }
+  details.qa {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    margin-bottom: 0.5rem;
+  }
+  details.qa summary {
+    cursor: pointer;
+    padding: 0.75rem 1.1rem;
+    font-weight: 600;
+    font-size: 0.98rem;
+    list-style: none;
+    display: flex;
+    gap: 0.7rem;
+    align-items: baseline;
+  }
+  details.qa summary::-webkit-details-marker { display: none; }
+  details.qa summary::before {
+    content: "+";
+    font-family: var(--mono);
+    color: var(--accent);
+    flex-shrink: 0;
+  }
+  details.qa[open] summary::before { content: "–"; }
+  details.qa .a {
+    padding: 0 1.1rem 0.9rem 2.35rem;
+    font-size: 0.95rem;
+    color: var(--ink);
+  }
+  details.qa .a ul { margin-bottom: 0; }
+
+  .footnote {
+    margin-top: 3.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--line);
+    font-family: var(--sans);
+    font-size: 0.78rem;
+    color: var(--muted);
+  }
+</style>
+</head>
+<body>
+
+<nav aria-label="Sections">
+  <div class="rail">
+    <span class="wordmark">RAEF</span>
+    <a href="#overview">Overview</a>
+    <a href="#architecture">Architecture</a>
+    <a href="#components">Components</a>
+    <a href="#lifecycle">Lifecycle</a>
+    <a href="#changes">What changed</a>
+    <a href="#decisions">Decisions</a>
+    <a href="#run">Run &amp; test</a>
+    <a href="#evidence">Evidence</a>
+    <a href="#strengths">Strengths &amp; limits</a>
+    <a href="#revision">60-second revision</a>
+    <a href="#interview">Interview Q&amp;A</a>
+  </div>
+</nav>
+
+<div class="page">
+
+<header class="doc">
+  <p class="eyebrow">Project revision document · 2026-07-16</p>
+  <h1>RAEF — Reliable Agent Execution Framework</h1>
+  <p class="thesis">A log-first runtime that makes LLM-agent tool execution durable across crashes, restarts, and ambiguous network failures — every side effect journaled before it is dispatched, replayed safely after failure.</p>
+  <div class="meta-strip">
+    <div><span class="k">Language</span><span class="v">Python 3.12+</span></div>
+    <div><span class="k">Runtime deps</span><span class="v">0 (stdlib)</span></div>
+    <div><span class="k">Store</span><span class="v">SQLite (WAL)</span></div>
+    <div><span class="k">Core source</span><span class="v">~7.9k lines</span></div>
+    <div><span class="k">Tests</span><span class="v">47 passing</span></div>
+    <div><span class="k">Gates</span><span class="v">ruff · mypy · CI</span></div>
+  </div>
+</header>
+
+<section id="overview">
+  <p class="eyebrow">Section 1</p>
+  <h2>Overview</h2>
+  <div class="prose">
+    <p>An agent that books a flight or writes to a database has a side effect it cannot take back. If the process dies <em>after</em> the request is sent but <em>before</em> the response is recorded, the naive options are both wrong: retry and you double-book; skip and you lose the booking. Worse, a timeout gives you no information at all — the write may or may not have happened.</p>
+    <p>RAEF sits between the agent loop and its tools and solves this with four mechanisms:</p>
+    <ol>
+      <li><strong>Log before send.</strong> The tool intent — name, arguments, deterministic execution ID — is committed to SQLite before the network call starts. A crash at any point leaves a durable record of what was in flight.</li>
+      <li><strong>Deterministic identity.</strong> <code>execution_id = sha256(run_id | plan_item_id | tool_name | canonical_json(args))</code>. A restarted process recomputes the same ID from the same logical call and finds the durable record — this is what makes replay <em>reuse</em> instead of <em>re-execute</em>.</li>
+      <li><strong>Explicit ambiguity.</strong> A write whose outcome is unknown raises <code>AmbiguousToolError</code> and is parked as <span class="chip warn">pending_recovery</span>. It is never silently retried.</li>
+      <li><strong>Verification-driven recovery.</strong> A pluggable verifier probes the target system: proven commit → mark <span class="chip ok">verified_committed</span> and reuse the result; proven absence → mark <span class="chip n">verified_not_found</span> and replay exactly once; inconclusive → hand off to a human or policy.</li>
+    </ol>
+    <div class="callout">
+      <p><strong>Elevator pitch.</strong> "I built a crash-durable execution runtime for LLM agents: a write-ahead log over SQLite with deterministic tool-execution IDs and an explicit six-state execution lifecycle. Kill the process at any point — including mid-write — and the restarted agent replays to where it stopped with exactly one commit landing at the target, which the demos verify from the target's own commit counter."</p>
+    </div>
+    <p>Everything runs locally with zero runtime dependencies: persistence is stdlib <code>sqlite3</code>, hashing is <code>hashlib</code>, serialization is <code>json</code>. A mock target service and a deterministic crash injector make every failure mode reproducible on a laptop and in CI — no API keys, no network.</p>
+  </div>
+</section>
+
+<section id="architecture">
+  <p class="eyebrow">Section 2</p>
+  <h2>System architecture</h2>
+  <div class="prose">
+    <p>The system is layered like a small database: an append-only event journal is the source of truth, mutable projections make reads cheap, and a facade guarantees the two never disagree.</p>
+  </div>
+
+  <div class="arch" role="img" aria-label="Layered architecture: the agent loop calls three coordinators (EvaluationRecorder, TransactionManager, RecoveryCoordinator), which all go through the LoggingService facade to projections and the WAL, stored in a single SQLite file.">
+    <div class="tier">
+      <div class="node"><span class="t">agent loop (yours)</span><span class="d">any orchestrator: scripted mock, OpenRouter-driven, LangChain-style wrapper</span></div>
+    </div>
+    <div class="flow">↓ <em>tool calls, step boundaries</em> ↓</div>
+    <div class="tier">
+      <div class="node"><span class="t">TransactionManager</span><span class="d">log-before-send, dedup by execution ID, ambiguity classification, safe replay</span></div>
+      <div class="node"><span class="t">RecoveryCoordinator</span><span class="d">per-record decisions after restart; optional target verifier resolves ambiguous writes</span></div>
+      <div class="node"><span class="t">EvaluationRecorder</span><span class="d">durable timing spans; open spans report as <code>interrupted</code> after a crash</span></div>
+    </div>
+    <div class="flow">↓ <em>every mutation, one facade</em> ↓</div>
+    <div class="tier">
+      <div class="node canon"><span class="t">LoggingService</span><span class="d">per-run lock · single SQLite transaction per operation · event payload validation · execution state-machine enforcement · auto-checkpoints</span></div>
+    </div>
+    <div class="flow">↓ <em>writes events + updates projections atomically</em> ↓</div>
+    <div class="tier">
+      <div class="node"><span class="t">WAL events + checkpoints</span><span class="d">append-only journal; 13 validated event types; checkpoints reference a sequence ID</span></div>
+      <div class="node"><span class="t">PlannerState</span><span class="d">plan items, statuses, cursor, LLM output history (projection)</span></div>
+      <div class="node"><span class="t">AgentContext</span><span class="d">message transcript, memory, pending execution IDs (projection)</span></div>
+      <div class="node"><span class="t">ExternalResults</span><span class="d">tool-execution cache keyed by execution ID; large payloads offloaded to artifact rows</span></div>
+    </div>
+    <div class="flow">↓</div>
+    <div class="tier">
+      <div class="node canon"><span class="t">SQLiteRuntimeStore — one file, journal_mode=WAL, synchronous=FULL</span><span class="d">canonical durability boundary · best-effort JSON mirrors written after commit for human inspection</span></div>
+    </div>
+  </div>
+
+  <h3>The execution state machine</h3>
+  <div class="prose">
+    <p>Every tool call moves through an explicit lifecycle, and the facade rejects illegal transitions — orchestration bugs cannot, for example, move a verified-committed write back to dispatched.</p>
+  </div>
+  <div class="sm" role="img" aria-label="State machine: intent_logged to dispatched to acked. Dispatched can become ambiguous, then verified_committed (reuse) or verified_not_found (replay to acked). Failures go to failed.">
+    <div class="sm-row">
+      <span class="st start">intent_logged</span><span class="arrow">→</span>
+      <span class="st">dispatched</span><span class="arrow">→</span>
+      <span class="st good">acked</span>
+      <span class="lbl">happy path: durable intent, send, durable result</span>
+    </div>
+    <div class="sm-row">
+      <span class="st">dispatched</span><span class="arrow">→</span>
+      <span class="st hold">timeout / crash (ambiguous)</span><span class="arrow">→</span>
+      <span class="lbl">verify against target…</span>
+    </div>
+    <div class="sm-row">
+      <span class="arrow">↳</span><span class="st good">verified_committed</span>
+      <span class="lbl">proof of commit → reuse the durable result, never re-send</span>
+    </div>
+    <div class="sm-row">
+      <span class="arrow">↳</span><span class="st">verified_not_found</span><span class="arrow">→</span>
+      <span class="st good">acked</span>
+      <span class="lbl">proof of absence → replay exactly once (idempotency key = execution ID)</span>
+    </div>
+    <div class="sm-row">
+      <span class="arrow">↳</span><span class="st dead">failed</span>
+      <span class="lbl">definitive error → surfaced to policy/human; retriable via explicit transition only</span>
+    </div>
+  </div>
+  <div class="prose">
+    <p>Terminal, reusable states: <span class="chip ok">acked</span> <span class="chip ok">verified_committed</span>. Recovery-eligible states: <span class="chip warn">intent_logged</span> <span class="chip warn">dispatched</span> <span class="chip n">verified_not_found</span>.</p>
+  </div>
+</section>
+
+<section id="components">
+  <p class="eyebrow">Section 3</p>
+  <h2>Component by component</h2>
+  <div class="table-wrap">
+    <table>
+      <tr><th>Module</th><th>Role</th><th>The detail worth remembering</th></tr>
+      <tr>
+        <td><code>logging_service.py</code></td>
+        <td>Facade over planner, context, results, and WAL. Owns run lifecycle, checkpoints, soft JSON mirrors.</td>
+        <td>Every public method takes a per-run re-entrant lock and opens one <code>BEGIN IMMEDIATE</code> SQLite transaction, so events and projections commit atomically. Event payloads are schema-validated per event type before append.</td>
+      </tr>
+      <tr>
+        <td><code>txn_manager.py</code></td>
+        <td>Log-before-send tool execution. Builds execution IDs, dedups, classifies outcomes.</td>
+        <td>On replay it distinguishes: terminal success → <code>REUSED</code>; failed → surfaced, never auto-retried; ambiguous → <code>PENDING_RECOVERY</code>; <code>verified_not_found</code> → the one state allowed to re-invoke the tool.</td>
+      </tr>
+      <tr>
+        <td><code>runtime_store.py</code></td>
+        <td>Single canonical SQLite layer: 9 tables (planner, messages, results, payload artifacts, WAL events, checkpoints, evaluation spans).</td>
+        <td><code>journal_mode=WAL</code> + <code>synchronous=FULL</code> = crash durability at fsync cost. Payloads &gt; 16 KB move to a content-addressed artifact table (SHA-256) instead of inflating hot rows.</td>
+      </tr>
+      <tr>
+        <td><code>wal.py</code></td>
+        <td>Backend-agnostic WAL protocol + SQLite implementation.</td>
+        <td>Checkpoints must reference an existing event <code>seq_id</code> in the same run — enforced at write time, audited by the CLI.</td>
+      </tr>
+      <tr>
+        <td><code>recovery/</code></td>
+        <td>Post-restart coordinator, decision strategy, verifier protocol, health checkers, pulse monitor.</td>
+        <td>Strategy maps state → decision (<code>resume_waiting</code>, <code>replay</code>, <code>mark_committed</code>, <code>handoff</code>). With a verifier wired, ambiguous writes are resolved by probing the target instead of handing off.</td>
+      </tr>
+      <tr>
+        <td><code>verifier.py</code></td>
+        <td>Commit probe for the mock target; <code>WriteVerifierProtocol</code> is the contract for real targets.</td>
+        <td>Two proofs: execution ID present in the target's action log, or domain state already matching the intended payload.</td>
+      </tr>
+      <tr>
+        <td><code>evaluation.py</code></td>
+        <td>Durable timing spans (step attempts, phases) stored in the same SQLite file.</td>
+        <td>Spans are opened <em>before</em> work starts, so a crash leaves an open span that reports as <code>interrupted</code> — crash visibility comes free from durability.</td>
+      </tr>
+      <tr>
+        <td><code>cli.py</code></td>
+        <td>Operator CLI: <code>runs · show · events · executions · pending · report · recover · audit</code>.</td>
+        <td><code>audit</code> checks log-first invariants (dangling pending IDs, intents without result records, checkpoint ahead of log) and exits non-zero on violation.</td>
+      </tr>
+      <tr>
+        <td><code>tools/</code></td>
+        <td>Mock agent, mock target service, crash injector.</td>
+        <td>The mock target supports four API levels (legacy, idempotent, RIFL-style probeable, queryable-distinguishable) — the framework's guarantees can be tested against each contract strength.</td>
+      </tr>
+      <tr>
+        <td><code>adapters/</code></td>
+        <td>Decorators (<code>with_logging_service</code>, <code>ensure_run_started</code>) and a LangChain-style tool wrapper with policy gates.</td>
+        <td><code>ToolPolicy</code> carries read-only / concurrency-safe / requires-permission metadata; permission denial raises before any intent is logged.</td>
+      </tr>
+    </table>
+  </div>
+</section>
+
+<section id="lifecycle">
+  <p class="eyebrow">Section 4</p>
+  <h2>Lifecycle walkthrough: one booked flight, three failure stories</h2>
+  <div class="prose">
+    <p>The demo task books flight RA512 against the mock target. The same logical write is driven through three injected failures; in every case the run ends with the order booked and the target's own commit counter at exactly 1.</p>
+    <h3>A — Hard crash after the write committed</h3>
+    <ol>
+      <li>Intent logged → dispatched → target commits → result <span class="chip ok">acked</span> (all durable).</li>
+      <li><code>SimulatedCrash</code> kills the process (exit 42) right after the tool transaction; the step's timing span is left open.</li>
+      <li>Restart with the same <code>run_id</code>: the agent replays the script, recomputes the same execution ID, finds the acked record → disposition <code>REUSED</code>. The tool is not re-invoked. The open span reports as <code>interrupted</code>; attempt 2 succeeds.</li>
+    </ol>
+    <h3>B — Ambiguous write, response lost</h3>
+    <ol>
+      <li>The target commits, but the adapter raises <code>AmbiguousToolError</code> before the ack is observed — the classic "timeout after send".</li>
+      <li>The record is parked <span class="chip warn">timeout / dispatched</span> and stays in the pending set. Crash, restart.</li>
+      <li>On resume the transaction manager returns <code>PENDING_RECOVERY</code>; the coordinator waits out the configured window, then asks the verifier. The execution ID is found in the target's action log → <span class="chip ok">verified_committed</span>, the durable result is reconciled into the transcript as a tool message, pending is cleared. No second commit.</li>
+    </ol>
+    <h3>C — Ambiguous write, request lost</h3>
+    <ol>
+      <li>The adapter raises before the request ever reaches the target — same client-side symptom as B, opposite truth.</li>
+      <li>After restart, verification finds no record and the domain state unchanged → <span class="chip n">verified_not_found</span>, decision <code>REPLAY</code>.</li>
+      <li>The transaction manager re-invokes the tool — the one state where re-execution is permitted — passing the execution ID as an idempotency key, and the write lands once: <span class="chip ok">acked</span>.</li>
+    </ol>
+    <div class="callout"><p><strong>The line that wins the interview:</strong> B and C are indistinguishable from the client's point of view at failure time. The only correct tiebreaker is evidence from the target, which is why recovery is verification-driven rather than retry-driven.</p></div>
+  </div>
+</section>
+
+<section id="changes">
+  <p class="eyebrow">Section 5</p>
+  <h2>What changed in the productization pass, and why</h2>
+  <div class="table-wrap">
+    <table>
+      <tr><th>Change</th><th>Before</th><th>After / why it matters</th></tr>
+      <tr>
+        <td><strong>Verification-driven recovery</strong> (new)</td>
+        <td>Ambiguous writes ended in <code>timeout/dispatched</code> limbo forever; the verifier existed but was never wired in. <code>REPLAY</code> decisions were advisory — no code executed them.</td>
+        <td><code>RecoveryCoordinator(verifier=…)</code> probes the target and converts ambiguity into <code>verified_committed</code> (reuse) or <code>verified_not_found</code> (replay); <code>TransactionManager</code> now safely re-executes only that state. Closes the framework's core loop.</td>
+      </tr>
+      <tr>
+        <td><strong>Lost-write scenario</strong> (new)</td>
+        <td>Only the "response lost" direction of ambiguity was simulatable.</td>
+        <td><code>--simulate-lost-write</code> demonstrates the opposite direction; together they prove the single-commit outcome from both sides. Fault flags now apply only to the first (crashing) process, as in a real restart.</td>
+      </tr>
+      <tr>
+        <td><strong>Operator CLI</strong> (new)</td>
+        <td>Inspecting a run meant opening SQLite by hand.</td>
+        <td><code>raef runs/show/events/executions/pending/report/recover/audit</code> over any data root, with <code>--json</code>; <code>audit</code> turns the log-first invariants into a checkable exit code.</td>
+      </tr>
+      <tr>
+        <td><strong>Dependency truth</strong></td>
+        <td><code>pyproject</code> declared langgraph, pydantic, SQLAlchemy, requests — none imported by the package.</td>
+        <td>Core now declares <strong>zero</strong> runtime dependencies (true to the code); optional extras <code>[http]</code>, <code>[mcp]</code>, <code>[dev]</code>. "My durable runtime is pure stdlib" is now a verifiable claim.</td>
+      </tr>
+      <tr>
+        <td><strong>Publishing-safe <code>.gitignore</code></strong></td>
+        <td>Ignored <code>test_*.py</code>, <code>*.json</code>, <code>*.txt</code>, <code>*.log</code> globally — a push to GitHub would have silently excluded 3 of 4 test files and all docs artifacts.</td>
+        <td>Ignores scoped to <code>data/</code> and caches. The repo's evidence is now actually publishable.</td>
+      </tr>
+      <tr>
+        <td><strong>Quality gates + CI</strong></td>
+        <td>25 ruff errors, 8 mypy errors, no CI, one latent <code>F821</code> bug (call to a function that never existed) in dead example code.</td>
+        <td>ruff and mypy clean with config in <code>pyproject</code>; dead code removed (<code>config.py</code>, <code>hello.py</code>, unused batching knobs, dead example function); GitHub Actions runs lint + types + 47 tests + the three crash demos and the nine-phase crash matrix on Python 3.12/3.13.</td>
+      </tr>
+      <tr>
+        <td><strong>Test depth</strong></td>
+        <td>25 tests; none directly covered the transaction manager — the heart of the system.</td>
+        <td>47 tests. New: txn dedup/replay/ambiguity semantics, verified-recovery end-to-end (asserting single commit from the target's own counters), CLI behavior including audit violation detection, and a reduced crash-matrix sweep with a deliberate cardinality-mismatch case.</td>
+      </tr>
+      <tr>
+        <td><strong>Observability</strong></td>
+        <td>Print-based demos only.</td>
+        <td>Structured stdlib <code>logging</code> at state transitions (library configures no handlers); WARNING on ambiguity, INFO on recovery decisions and replays.</td>
+      </tr>
+      <tr>
+        <td><strong>API ergonomics + docs</strong></td>
+        <td>Recovery types buried at <code>raef.recovery.recovery.handler</code>; README referenced examples that don't exist.</td>
+        <td>Top-level exports (<code>raef.RecoveryCoordinator</code>, …); README rewritten around the state machine, honest guarantees, and the three demos.</td>
+      </tr>
+    </table>
+  </div>
+</section>
+
+<section id="decisions">
+  <p class="eyebrow">Section 6</p>
+  <h2>Key design decisions</h2>
+
+  <div class="decision">
+    <h3>Event journal + mutable projections, one transaction</h3>
+    <div class="row"><span class="tag">Decision</span> Append validated WAL events and update the planner/context/result projections inside the same SQLite transaction.</div>
+    <div class="row"><span class="tag">Alternative</span> Pure event sourcing (rebuild state by folding events) or projections only (no journal).</div>
+    <div class="row"><span class="tag">Why</span> Reads stay O(1) without replaying the log; the journal remains the audit trail and recovery source; atomic commit means the two can never disagree — which pure "write log, then update state" designs must handle as a partial-failure case.</div>
+  </div>
+
+  <div class="decision">
+    <h3>Deterministic execution IDs instead of stored UUIDs</h3>
+    <div class="row"><span class="tag">Decision</span> Hash the logical call identity (<code>run_id | plan_item_id | tool_name | canonical args</code>, optional invocation key) into the execution ID.</div>
+    <div class="row"><span class="tag">Alternative</span> Generate a UUID at first attempt and persist it.</div>
+    <div class="row"><span class="tag">Why</span> A restarted process may crash <em>before</em> a UUID could be persisted-and-associated; a deterministic ID is recomputable from the replayed call itself, so dedup works even for the earliest crash windows. The <code>invocation_key</code> escape hatch handles intentional repeat calls with identical args.</div>
+  </div>
+
+  <div class="decision">
+    <h3>SQLite with <code>synchronous=FULL</code> as the only store</h3>
+    <div class="row"><span class="tag">Decision</span> One local SQLite file in WAL mode, fsync on every commit; JSON files are demoted to non-canonical mirrors.</div>
+    <div class="row"><span class="tag">Alternative</span> Postgres/Redis service, or JSON files as the store.</div>
+    <div class="row"><span class="tag">Why</span> The unit of failure being defended is the <em>process</em>, and SQLite gives real transactional durability with zero operational surface — right-sized and honest for a local-first framework. The WAL interface is a protocol, so a server-backed store is a swap, not a rewrite. Cost: ~fsync per event batch (visible in the timing report), single-writer-per-file scaling.</div>
+  </div>
+
+  <div class="decision">
+    <h3>Ambiguity is a first-class state, not an exception path</h3>
+    <div class="row"><span class="tag">Decision</span> Timeouts on writes park the execution as pending; only target-side evidence (or an explicit human decision) moves it on. Illegal transitions raise.</div>
+    <div class="row"><span class="tag">Alternative</span> Retry-with-backoff by default, as most HTTP clients do.</div>
+    <div class="row"><span class="tag">Why</span> Blind retry is exactly the double-booking bug this framework exists to prevent; for non-idempotent side effects the only safe default is to stop and verify. The enforced state machine makes "safe to replay" a provable property of a record rather than a comment.</div>
+  </div>
+
+  <div class="decision">
+    <h3>Verify-then-replay leans on target idempotency — stated, not hidden</h3>
+    <div class="row"><span class="tag">Decision</span> Replay after <code>verified_not_found</code> passes the execution ID as an idempotency key; the docs state plainly that against a target with no dedup there remains a window (verify says absent; the original late request lands after the replay) no client alone can close.</div>
+    <div class="row"><span class="tag">Why</span> That residual race is a fundamental distributed-systems limit (it is the problem RIFL-style request layers solve server-side). Claiming "exactly-once" unqualified would be false; "effectively-once given an idempotent target, at-most-once dispatch per proven state otherwise" is defensible and demonstrated.</div>
+  </div>
+
+  <div class="decision">
+    <h3>Failure injection as deterministic phases, not chaos</h3>
+    <div class="row"><span class="tag">Decision</span> The demo threads named crash phases (<code>before_tool_transaction</code>, <code>after_tool_transaction</code>, …) through the step loop; the e2e driver runs the agent as a child process and asserts on exit code 42, then on the restarted run.</div>
+    <div class="row"><span class="tag">Alternative</span> Random kill-based chaos testing.</div>
+    <div class="row"><span class="tag">Why</span> Each crash point maps to a specific recovery claim, so every claim has a reproducible test — and the same demos run in CI because they need no network.</div>
+  </div>
+</section>
+
+<section id="run">
+  <p class="eyebrow">Section 7</p>
+  <h2>Run &amp; test instructions</h2>
+  <div class="prose"><p>Everything below is local and offline. Python 3.12+ required.</p></div>
+<pre><code><span class="c"># setup</span>
+python -m venv .venv &amp;&amp; . .venv/bin/activate
+python -m pip install -e '.[dev]'
+
+<span class="c"># quality gates (all clean)</span>
+pytest -q            <span class="c"># 45 passed</span>
+ruff check .         <span class="c"># All checks passed!</span>
+mypy src             <span class="c"># Success: no issues found in 33 source files</span>
+
+<span class="c"># demo 1 — hard crash after a committed write; restart reuses the result</span>
+python example/crash_recovery_e2e.py --clean
+
+<span class="c"># demo 2 — write committed, response lost; recovery proves the commit</span>
+python example/crash_recovery_e2e.py --clean --runtime-dir data/demo_ambiguous --simulate-ambiguous-write
+
+<span class="c"># demo 3 — request lost; recovery proves absence, replays exactly once</span>
+python example/crash_recovery_e2e.py --clean --runtime-dir data/demo_lost_write --simulate-lost-write
+
+<span class="c"># inspect any run with the operator CLI</span>
+raef --data-root data/demo_ambiguous runs
+raef --data-root data/demo_ambiguous executions &lt;run_id&gt;
+raef --data-root data/demo_ambiguous audit &lt;run_id&gt;     <span class="c"># exit 1 on invariant violation</span>
+</code></pre>
+  <div class="prose">
+    <p>Crash point is configurable — <code>--crash-step N --crash-phase &lt;phase&gt;</code> — across nine phases from <code>after_step_started</code> to <code>after_record_final_message</code>.</p>
+  </div>
+</section>
+
+<section id="evidence">
+  <p class="eyebrow">Section 8</p>
+  <h2>Recorded evidence (2026-07-16, Apple M4, Python 3.13)</h2>
+  <div class="prose"><p>Full transcripts live in <code>docs/artifacts/2026-07-16-improvements/</code>. The decisive check reads the target store's own commit counter, not framework logs:</p></div>
+  <div class="table-wrap">
+    <table>
+      <tr><th>Scenario</th><th>Final execution state</th><th>Target commits</th><th>Pending after</th><th>Order state</th></tr>
+      <tr><td>Demo 1 — hard crash</td><td><span class="chip ok">ok / acked</span> (attempt 1 <span class="chip warn">interrupted</span>, attempt 2 reused)</td><td>1</td><td>[]</td><td>booked</td></tr>
+      <tr><td>Demo 2 — response lost</td><td><span class="chip ok">ok / verified_committed</span></td><td>1</td><td>[]</td><td>booked</td></tr>
+      <tr><td>Demo 3 — request lost</td><td><span class="chip ok">ok / acked</span> (via verified_not_found → replay)</td><td>1</td><td>[]</td><td>booked</td></tr>
+    </table>
+  </div>
+  <div class="prose">
+    <p>Sample durable timing report (demo 2): 14 spans; step attempts 16.0 ms <span class="chip warn">interrupted</span>, 15.6 ms and 11.1 ms <span class="chip ok">succeeded</span>; phase totals — tool_transaction 12.7 ms, recovery 5.5 ms, llm_generate 1.8 ms. Latency is fsync-dominated by design (<code>synchronous=FULL</code>).</p>
+    <p><code>raef audit</code> on every demo run: <em>"audit ok: log-first invariants hold."</em> The audit's violation path is itself tested (a deliberately dangling pending ID flips the exit code to 1).</p>
+  </div>
+
+  <h3>The full crash matrix — all nine injection phases</h3>
+  <div class="prose">
+    <p><code>python example/crash_recovery_e2e.py --sweep-crash-phases --clean</code> runs the scenario once per crash phase, each in its own clean runtime directory, and exits non-zero if any phase shows a duplicate or missing commit. Recorded matrix: <code>docs/artifacts/2026-07-16-crash-matrix/</code>.</p>
+  </div>
+  <div class="table-wrap">
+    <table>
+      <tr><th>Crash phase</th><th>Step</th><th>Attempts</th><th>Commits before restart</th><th>Final commits</th><th>Dup</th><th>Classification</th></tr>
+      <tr><td><code>after_step_started</code></td><td>0</td><td>3 (1 <span class="chip warn">interrupted</span>)</td><td>0</td><td>1</td><td>0</td><td>committed_after_restart</td></tr>
+      <tr><td><code>before_agent_turn</code></td><td>0</td><td>3 (1 <span class="chip warn">interrupted</span>)</td><td>0</td><td>1</td><td>0</td><td>committed_after_restart</td></tr>
+      <tr><td><code>after_agent_turn</code></td><td>0</td><td>3 (1 <span class="chip warn">interrupted</span>)</td><td>0</td><td>1</td><td>0</td><td>committed_after_restart</td></tr>
+      <tr><td><code>after_record_llm_turn</code></td><td>0</td><td>3 (1 <span class="chip warn">interrupted</span>)</td><td>0</td><td>1</td><td>0</td><td>committed_after_restart</td></tr>
+      <tr><td><code>before_tool_transaction</code></td><td>0</td><td>3 (1 <span class="chip warn">interrupted</span>)</td><td>0</td><td>1</td><td>0</td><td>committed_after_restart</td></tr>
+      <tr><td><code>after_tool_transaction</code></td><td>0</td><td>3 (1 <span class="chip warn">interrupted</span>)</td><td>1</td><td>1</td><td>0</td><td>reused_committed_result</td></tr>
+      <tr><td><code>after_recovery</code></td><td>0</td><td>3 (1 <span class="chip warn">interrupted</span>)</td><td>1</td><td>1</td><td>0</td><td>reused_committed_result</td></tr>
+      <tr><td><code>after_advance_plan_item</code></td><td>0</td><td>2 (1 <span class="chip warn">interrupted</span>)</td><td>1</td><td>1</td><td>0</td><td>reused_committed_result</td></tr>
+      <tr><td><code>after_record_final_message</code></td><td>1</td><td>3 (1 <span class="chip warn">interrupted</span>)</td><td>1</td><td>1</td><td>0</td><td>reused_committed_result</td></tr>
+    </table>
+  </div>
+  <div class="prose">
+    <p>The classification is derived from evidence, not from the phase name: the sweep reads the target's commit counter after the crash child exits and again after the resumed run. Crashes <em>before</em> the write show 0 → 1 (the restart performs it once); crashes <em>after</em> it stay at 1 (the restart reuses and never re-fires). <code>after_advance_plan_item</code> has only two step attempts because the completed plan item is skipped entirely on resume. A reduced three-phase sweep plus a deliberate cardinality-mismatch case run inside the test suite (<code>tests/test_crash_matrix.py</code>), so this invariant is enforced by CI, not just recorded once.</p>
+  </div>
+</section>
+
+<section id="strengths">
+  <p class="eyebrow">Section 9</p>
+  <h2>Strengths, limitations, future work</h2>
+  <div class="grid-2">
+    <div class="panel good">
+      <h4>Strengths to lead with</h4>
+      <ul>
+        <li>Correctness core: log-before-send + deterministic IDs + enforced state machine.</li>
+        <li>Both ambiguity directions resolved by evidence, verified from the target's own counters.</li>
+        <li>Zero-dependency stdlib core; everything reproducible offline, including in CI.</li>
+        <li>Failure injection is deterministic — every recovery claim has a named, repeatable test.</li>
+        <li>Operability: an audit command that turns invariants into exit codes; durable timing that classifies crashes as <code>interrupted</code> attempts.</li>
+      </ul>
+    </div>
+    <div class="panel risk">
+      <h4>Limitations (say them before they're asked)</h4>
+      <ul>
+        <li>Single-process, single-writer per run; durability is one machine's disk — no replication or HA.</li>
+        <li>Verify-then-replay is fully safe only when the target dedupes by execution ID; the residual late-duplicate window is documented, not solved.</li>
+        <li>WAL grows unboundedly — checkpoints exist but log truncation/compaction is not implemented.</li>
+        <li>Recovery verification is wired for the mock target; real connectors (HTTP idempotency keys, payment-style check APIs) are contracts, not implementations.</li>
+        <li>Payloads are stored in plaintext; no redaction, encryption, or access control.</li>
+      </ul>
+    </div>
+  </div>
+  <div class="prose">
+    <p><strong>Future work, in priority order:</strong> WAL truncation after checkpoint (bounded storage); a Postgres store behind the existing WAL protocol (multi-worker, row-level run locks); recovery-time budget with escalation policies; payload redaction hooks; a verifier implementation for a real HTTP service with idempotency keys.</p>
+  </div>
+</section>
+
+<section id="revision">
+  <p class="eyebrow">Section 10</p>
+  <h2>60-second revision</h2>
+  <div class="grid-2">
+    <div class="panel">
+      <h4>Numbers</h4>
+      <ul>
+        <li>~7.9k lines core (33 files), zero runtime deps</li>
+        <li>47 tests; ruff + mypy clean; CI on 3.12/3.13</li>
+        <li>9-phase crash matrix: every phase → exactly 1 target commit</li>
+        <li>6 execution states; 13 validated WAL event types; 9 tables</li>
+        <li>16 KB inline payload limit → SHA-256 artifact offload</li>
+        <li>~15 ms per step attempt, fsync-dominated; recovery ~5.5 ms</li>
+        <li>3 demos → target commit counter = 1 in all of them</li>
+      </ul>
+    </div>
+    <div class="panel">
+      <h4>Vocabulary to use naturally</h4>
+      <ul>
+        <li><em>log-before-send</em>, <em>write-ahead log</em>, <em>projection</em></li>
+        <li><em>deterministic execution ID</em>, <em>idempotency key</em></li>
+        <li><em>ambiguous write</em>, <em>verification-driven recovery</em></li>
+        <li><em>effectively-once</em> (never claim unqualified exactly-once)</li>
+        <li><em>interrupted span</em>, <em>invariant audit</em></li>
+      </ul>
+    </div>
+  </div>
+  <div class="callout prose">
+    <p><strong>The four-sentence story.</strong> Agent tool calls are side effects, and crashes make them unsafe. RAEF journals every call before dispatch, gives it a deterministic identity, and drives it through an enforced state machine. Timeouts park writes as pending; recovery resolves them with evidence from the target — reuse if committed, replay once if provably absent, hand off if unknown. I proved it by killing the process at nine injectable points and checking the target's own commit counter: always exactly one.</p>
+  </div>
+</section>
+
+<section id="interview">
+  <p class="eyebrow">Section 11</p>
+  <h2>Interview questions &amp; answer outlines</h2>
+  <div class="prose"><p>Click a question to self-test before revealing the outline.</p></div>
+
+  <p class="qa-topic">Architecture</p>
+  <details class="qa"><summary>Why log the intent before dispatching the tool call?</summary><div class="a">If you send first and log after, a crash in between leaves an untracked side effect — the worst failure mode, invisible on restart. Logging first means the recovery scan always has a record of anything possibly in flight; the cost is a benign "intent logged, never sent" record, which recovery classifies as safe to replay (for writes, the dispatch marker is written before invoke, so <code>intent_logged</code> means nothing was sent).</div></details>
+  <details class="qa"><summary>Walk me through what happens when the process dies mid-write.</summary><div class="a">Durable state: intent + dispatched marker. On restart: same inputs → same execution ID → record found in <code>dispatched</code>. Transaction manager returns <code>PENDING_RECOVERY</code> without touching the target. Coordinator waits out the in-flight window, then verifier probes the target: found → <code>verified_committed</code>, result reconciled into the transcript; absent → <code>verified_not_found</code> → single safe replay with idempotency key; probe fails → handoff. Every transition is validated against the allowed-transitions table.</div></details>
+  <details class="qa"><summary>Why both an event log and mutable projections? Isn't that redundant?</summary><div class="a">They answer different questions: projections answer "what is the state now" in O(1); the journal answers "how did we get here" and survives projection bugs. Written in one SQLite transaction they can't diverge. Pure event sourcing makes every read a fold; projections-only loses the audit trail and recovery ordering. Checkpoints tie a snapshot to a log position (<code>seq_id</code>) so future truncation is possible.</div></details>
+  <details class="qa"><summary>How is the execution ID built, and what about collisions?</summary><div class="a">SHA-256 over <code>run_id | plan_item_id | tool_name | canonical JSON args</code> (sorted keys), truncated to 96 bits. Identical logical calls colliding is the <em>feature</em> (dedup); accidental collisions at 96 bits are negligible at agent scale. Intentional repeats with identical args are disambiguated with an explicit <code>invocation_key</code>. Cross-run reuse of an ID is rejected at the facade.</div></details>
+  <details class="qa"><summary>Why a facade (LoggingService) instead of letting components write to the store directly?</summary><div class="a">Single choke point for the three invariants: per-run mutual exclusion (RLock), atomicity (one transaction per operation), and legality (event payload validation + state-machine enforcement). Components stay composable — txn manager, recovery, evaluation don't know about each other — and the store can be swapped behind the WAL protocol.</div></details>
+
+  <p class="qa-topic">Tradeoffs</p>
+  <details class="qa"><summary>Why SQLite and not Postgres or Redis?</summary><div class="a">The failure unit defended here is the process, not the machine fleet. SQLite gives real ACID + WAL durability with zero ops, works offline, and makes the demos/CI reproducible. Redis (default config) can lose acknowledged writes on crash — wrong tool for a durability core. Postgres is the right growth path and the WAL protocol is designed as the seam; what changes is locking (per-run advisory/row locks) not the model.</div></details>
+  <details class="qa"><summary><code>synchronous=FULL</code> makes every commit fsync. Defend that.</summary><div class="a">The entire value proposition is "acked means durable"; NORMAL in WAL mode can lose the last commits on OS/power failure. ~15 ms per step is dominated by fsync and that's the honest price of the guarantee. Mitigations if needed: batch events per step into one commit (group commit), or offer a documented relaxed mode for non-critical runs — a policy knob, not a redesign.</div></details>
+  <details class="qa"><summary>What does checkpoint frequency trade off?</summary><div class="a">Checkpoints snapshot projections at a log position. More frequent → faster recovery reads and earlier truncation potential, but more write amplification per event. It's configurable (<code>checkpoint_every_n_events</code>, demos use 4). Since projections are also durable, checkpoints here mainly bound the "events after checkpoint" replay window and enable future log compaction.</div></details>
+  <details class="qa"><summary>Why enforce the state machine in code rather than documenting it?</summary><div class="a">Recovery decisions key off states; a corrupted state (e.g. <code>verified_committed</code> → <code>dispatched</code>) could re-fire a committed write — the exact catastrophe the system prevents. Raising on illegal transitions turns orchestration bugs into loud failures. It also forced a real design decision: replay after <code>verified_not_found</code> deliberately skips the dispatch marker because that transition is illegal, and repeat ambiguity during replay stays in <code>verified_not_found</code> for re-verification.</div></details>
+
+  <p class="qa-topic">Scalability</p>
+  <details class="qa"><summary>How would this scale to many concurrent agents or workers?</summary><div class="a">Today: one process, per-run locks, SQLite single-writer — fine for its scope. Scaling path: keep the model, swap the store — Postgres behind the WAL protocol, per-run advisory locks or <code>SELECT … FOR UPDATE</code> for mutual exclusion, workers claiming runs. The recovery scan is already run-scoped, so sharding by run_id is natural. The deterministic-ID dedup needs no change — it's storage-agnostic.</div></details>
+  <details class="qa"><summary>The WAL grows forever. What's your plan?</summary><div class="a">Named limitation. Checkpoints already bind snapshots to <code>seq_id</code>, so truncation = delete events ≤ last checkpoint that aren't needed for open executions, keeping terminal external-result records (they're the dedup source). I'd implement it as a <code>raef compact</code> CLI verb with an audit run before and after.</div></details>
+  <details class="qa"><summary>What happens with very large tool payloads?</summary><div class="a">Payloads over 16 KB inline limit move to a content-addressed artifact table (SHA-256 keyed), keeping hot rows and checkpoint snapshots small; records carry a typed ref (id, size, hash). Next step for truly large blobs is spilling artifacts to files/object storage behind the same ref shape.</div></details>
+
+  <p class="qa-topic">Failure modes</p>
+  <details class="qa"><summary>Two writes time out identically — one committed, one never arrived. How do you tell them apart?</summary><div class="a">You can't, from the client alone — that's the core insight. Both are <code>timeout/dispatched</code> locally. The tiebreaker must be target-side evidence: probe by execution ID (or domain readback). Found → reuse; provably absent → replay once; can't tell → do nothing automatic, hand off. This is why recovery is verification-driven, not retry-driven.</div></details>
+  <details class="qa"><summary>Is verify-then-replay actually safe? What's the race?</summary><div class="a">The race: verify says absent, you replay, then the <em>original</em> late request finally lands → duplicate. A client alone cannot close this window. It's closed by the target deduping on the idempotency key (the execution ID travels with both attempts — same key, one commit), which RIFL-style request layers formalize. Against a target with no dedup, RAEF's honest posture is: verified replay is a policy choice with a documented residual risk, default is handoff.</div></details>
+  <details class="qa"><summary>What if the crash happens during recovery itself?</summary><div class="a">Recovery is idempotent by construction: decisions are pure functions of durable records; marking committed re-checks the transcript before reconciling (no duplicate tool messages); replay goes through the same dedup'd transaction path. Run recovery twice and the second pass finds terminal states and does nothing.</div></details>
+  <details class="qa"><summary>What failure modes are NOT handled?</summary><div class="a">Disk loss/corruption of the SQLite file (single copy — needs backup/replication); Byzantine or lying targets (verification trusts the target's answer); concurrent writers on the same run from different processes (locks are in-process; the DB transaction still serializes but the design assumes one runner per run); clock skew only affects wait-window pacing, not correctness.</div></details>
+  <details class="qa"><summary>Why does a failed execution not auto-retry?</summary><div class="a"><code>failed</code> means the target answered definitively — retry is a <em>policy</em> question (was it transient? is the action still wanted?), not a runtime one. The state machine allows failed → dispatched so a policy layer can retry explicitly; the runtime just refuses to guess. Ambiguity (timeout) is deliberately a different state from failure.</div></details>
+
+  <p class="qa-topic">Testing</p>
+  <details class="qa"><summary>How do you test crash recovery deterministically?</summary><div class="a">Two levels. Unit: fault-injecting adapters raise <code>AmbiguousToolError</code> before/after really mutating a real mock target, then assertions run on both RAEF state and the target's own counters. E2E: the driver spawns the agent as a child process, a crash simulator raises at a named phase (nine injection points), driver asserts exit code 42, restarts with the same run_id, and asserts the final state — same flow CI runs, no network.</div></details>
+  <details class="qa"><summary>What's the most important assertion in the suite?</summary><div class="a"><code>target.store.stats["total_commits"] == 1</code> after each ambiguity scenario — it checks the business outcome (no double booking) from the target's own bookkeeping rather than trusting the framework's account of itself. Plus its mirror: replayed tools are invoked the expected number of times (1 for reuse, 2 for lost-then-replayed).</div></details>
+  <details class="qa"><summary>How did you test the audit tool?</summary><div class="a">Both directions: a clean seeded run exits 0 with "invariants hold"; then the test deliberately corrupts an invariant (adds a pending execution ID with no durable record) and asserts exit code 1 naming the violation. An auditor whose failure path is untested is decoration.</div></details>
+
+  <p class="qa-topic">Observability</p>
+  <details class="qa"><summary>How do you observe a run in production terms?</summary><div class="a">Three layers: (1) durable evaluation spans — opened before work, so crashes are visible as <code>interrupted</code> attempts with per-phase timing; (2) structured stdlib logging at state transitions (WARNING on ambiguity, INFO on recovery decisions), handler-free as a library should be; (3) the CLI — <code>events</code> for the journal, <code>executions</code> for statuses, <code>report</code> for timing, <code>audit</code> for invariants as an exit code you can alert on.</div></details>
+  <details class="qa"><summary>Why store timing spans in the same SQLite file as the runtime?</summary><div class="a">Crash-consistency of the telemetry itself: a span opened before work and never closed is durable evidence of an interrupted attempt — an external metrics store would just show a gap. One transaction domain also means timing can't outlive or predate the state it describes. At scale you'd export from this file, not bypass it.</div></details>
+
+  <p class="qa-topic">Security</p>
+  <details class="qa"><summary>What's the security posture?</summary><div class="a">Honest scope: local developer runtime — no auth, no encryption at rest, payloads stored plaintext (flagged limitation; redaction hooks are future work). What exists by design: <code>ToolPolicy</code> permission gates that deny before any intent is logged, read/write operation typing so policy can treat writes as privileged, and a full audit trail of every attempted side effect — which is the forensic property security teams actually want from agents.</div></details>
+  <details class="qa"><summary>Could a malicious tool result corrupt the runtime?</summary><div class="a">Results are treated as opaque JSON — validated for shape (dict), size-gated into artifact storage, never executed or templated. The state machine is driven by the runtime's own observations, not payload content. The realistic risk is prompt-injection at the agent layer, upstream of RAEF; RAEF's contribution there is the permission gate and the journal.</div></details>
+
+  <p class="qa-topic">Performance</p>
+  <details class="qa"><summary>Where does the time go in a step?</summary><div class="a">From the durable report: ~15 ms per attempt; tool_transaction ~12.7 ms dominates, recovery ~5.5 ms, mock LLM ~1.8 ms. Within the transaction it's fsync cost — several durable commits (intent, dispatch, result, context) at <code>synchronous=FULL</code>. Real deployments invert the ratio: LLM and network latency dwarf journaling overhead, which is exactly the argument for paying it.</div></details>
+  <details class="qa"><summary>How would you cut the journaling overhead?</summary><div class="a">Group commit: batch the events of one logical operation into one transaction (already the facade's shape — intent+dispatch could merge); tune checkpoint interval; optionally expose a documented relaxed-durability mode. Measure first via the built-in phase report — the instrumentation to justify the optimization already exists.</div></details>
+
+  <p class="qa-topic">Judgment &amp; reflection</p>
+  <details class="qa"><summary>Why not just use LangGraph's checkpointing?</summary><div class="a">Different layer. Graph checkpointers persist <em>conversation/graph state</em> between steps; they don't give tool side effects an identity, a state machine, or ambiguity resolution — resume after a mid-write crash and the framework happily re-runs the node. RAEF targets the tool boundary specifically and is designed to sit <em>inside</em> such frameworks (the LangChain-style wrapper demonstrates the integration point).</div></details>
+  <details class="qa"><summary>What was the hardest design bug you hit?</summary><div class="a">Making replay legal. First cut re-dispatched <code>verified_not_found</code> executions — which the transition table correctly rejected (<code>verified_not_found → dispatched</code> is illegal, dispatch markers mean "first send"). The fix reshaped the feature: replay skips the dispatch marker, and repeat-ambiguity during replay stays in <code>verified_not_found</code> for re-verification rather than regressing to <code>dispatched</code>. The state machine caught my own design error — the best argument for having it.</div></details>
+  <details class="qa"><summary>What would you build differently starting over?</summary><div class="a">(1) Design the verifier contract on day one instead of retrofitting — ambiguity without resolution is half a feature. (2) Async-first API for concurrent tool calls (the pending set already supports multiple in-flight IDs; the execution API doesn't). (3) Log compaction from the start, since checkpoints only pay off when the log can shrink. I'd keep: stdlib-only core, deterministic IDs, deterministic fault injection.</div></details>
+</section>
+
+<p class="footnote">RAEF · Reliable Agent Execution Framework · revision document generated 2026-07-16 · evidence transcripts in <code>docs/artifacts/2026-07-16-improvements/</code></p>
+
+</div>
+
+</body>
+</html>

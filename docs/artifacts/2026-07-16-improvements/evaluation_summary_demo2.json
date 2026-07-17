@@ -1,0 +1,284 @@
+{
+  "crash": {
+    "exit_code": 42,
+    "phase": "after_tool_transaction",
+    "step": 0
+  },
+  "evaluation_summary": {
+    "attempts": [
+      {
+        "attempt_no": 1,
+        "duration_ms": 16.001,
+        "phase": "step_total",
+        "plan_item_id": "step_0",
+        "recorded_status": "interrupted",
+        "status": "interrupted",
+        "step_index": 0
+      },
+      {
+        "attempt_no": 2,
+        "duration_ms": 15.990999999999998,
+        "phase": "step_total",
+        "plan_item_id": "step_0",
+        "recorded_status": "succeeded",
+        "status": "succeeded",
+        "step_index": 0
+      },
+      {
+        "attempt_no": 1,
+        "duration_ms": 11.025,
+        "phase": "step_total",
+        "plan_item_id": "step_0",
+        "recorded_status": "succeeded",
+        "status": "succeeded",
+        "step_index": 1
+      }
+    ],
+    "completed_phase_counts": {
+      "advance_plan_item": 2,
+      "llm_generate": 3,
+      "record_final_message": 1,
+      "record_llm_turn": 2,
+      "recovery": 1,
+      "tool_transaction": 2
+    },
+    "completed_phase_duration_ms": {
+      "advance_plan_item": 9.513000000000002,
+      "llm_generate": 1.7889999999999997,
+      "record_final_message": 4.09,
+      "record_llm_turn": 4.817,
+      "recovery": 5.662000000000001,
+      "tool_transaction": 12.799000000000001
+    },
+    "completed_step_duration_ms": 43.016999999999996,
+    "span_count": 14
+  },
+  "inference_log_path": "data/demo_ambiguous/openrouter_mock_inference.jsonl",
+  "latest_seq": 30,
+  "ok": true,
+  "planner_statuses": [
+    {
+      "plan_item_id": "step_0",
+      "status": "done"
+    }
+  ],
+  "report": {
+    "completed_phase_duration_ms": {
+      "advance_plan_item": 9.513000000000002,
+      "llm_generate": 1.7889999999999997,
+      "record_final_message": 4.09,
+      "record_llm_turn": 4.817,
+      "recovery": 5.662000000000001,
+      "tool_transaction": 12.799000000000001
+    },
+    "completed_step_duration_ms": 43.016999999999996,
+    "orphan_phases": [],
+    "run_id": "sample-openrouter-mock-crash-e2e-1784247966",
+    "span_count": 14,
+    "steps": [
+      {
+        "attempts": [
+          {
+            "attempt_no": 1,
+            "duration_ms": 16.001,
+            "error_message": "Simulated crash at step=0 phase=after_tool_transaction",
+            "finished_at": "2026-07-17T00:26:07.052877+00:00",
+            "metadata": {
+              "exception_type": "SimulatedCrash",
+              "script_length": 2
+            },
+            "phase": "step_total",
+            "phases": [
+              {
+                "attempt_no": 1,
+                "duration_ms": 0.417,
+                "error_message": null,
+                "finished_at": "2026-07-17T00:26:07.037517+00:00",
+                "metadata": {},
+                "phase": "llm_generate",
+                "recorded_status": "succeeded",
+                "span_id": "eval_e1914147e6654e95b24b2cf05e944a5d",
+                "started_at": "2026-07-17T00:26:07.037100+00:00",
+                "status": "succeeded"
+              },
+              {
+                "attempt_no": 1,
+                "duration_ms": 2.331,
+                "error_message": null,
+                "finished_at": "2026-07-17T00:26:07.039946+00:00",
+                "metadata": {},
+                "phase": "record_llm_turn",
+                "recorded_status": "succeeded",
+                "span_id": "eval_8e85403fd84047f9b8b8bd138ffa4475",
+                "started_at": "2026-07-17T00:26:07.037615+00:00",
+                "status": "succeeded"
+              },
+              {
+                "attempt_no": 1,
+                "duration_ms": 12.3,
+                "error_message": "Simulated crash at step=0 phase=after_tool_transaction",
+                "finished_at": "2026-07-17T00:26:07.052362+00:00",
+                "metadata": {
+                  "exception_type": "SimulatedCrash",
+                  "tool_name": "apply-action"
+                },
+                "phase": "tool_transaction",
+                "recorded_status": "interrupted",
+                "span_id": "eval_39326ef5711d43dda56d577d981b334a",
+                "started_at": "2026-07-17T00:26:07.040062+00:00",
+                "status": "interrupted"
+              }
+            ],
+            "recorded_status": "interrupted",
+            "span_id": "eval_3217ed151c024bcebbc49ef4462eae93",
+            "started_at": "2026-07-17T00:26:07.036876+00:00",
+            "status": "interrupted"
+          },
+          {
+            "attempt_no": 2,
+            "duration_ms": 15.990999999999998,
+            "error_message": null,
+            "finished_at": "2026-07-17T00:26:07.130520+00:00",
+            "metadata": {
+              "script_length": 2
+            },
+            "phase": "step_total",
+            "phases": [
+              {
+                "attempt_no": 2,
+                "duration_ms": 0.598,
+                "error_message": null,
+                "finished_at": "2026-07-17T00:26:07.115681+00:00",
+                "metadata": {},
+                "phase": "llm_generate",
+                "recorded_status": "succeeded",
+                "span_id": "eval_9039a72542ac4ee093ae11ca035f21fb",
+                "started_at": "2026-07-17T00:26:07.115083+00:00",
+                "status": "succeeded"
+              },
+              {
+                "attempt_no": 2,
+                "duration_ms": 2.4859999999999998,
+                "error_message": null,
+                "finished_at": "2026-07-17T00:26:07.118273+00:00",
+                "metadata": {},
+                "phase": "record_llm_turn",
+                "recorded_status": "succeeded",
+                "span_id": "eval_36bcf469eb5b49b18b9a60fc28173a2c",
+                "started_at": "2026-07-17T00:26:07.115787+00:00",
+                "status": "succeeded"
+              },
+              {
+                "attempt_no": 2,
+                "duration_ms": 0.499,
+                "error_message": null,
+                "finished_at": "2026-07-17T00:26:07.118862+00:00",
+                "metadata": {
+                  "tool_name": "apply-action"
+                },
+                "phase": "tool_transaction",
+                "recorded_status": "succeeded",
+                "span_id": "eval_52f8bd4f13834a2d8f89500a2216fedf",
+                "started_at": "2026-07-17T00:26:07.118363+00:00",
+                "status": "succeeded"
+              },
+              {
+                "attempt_no": 2,
+                "duration_ms": 5.662000000000001,
+                "error_message": null,
+                "finished_at": "2026-07-17T00:26:07.124722+00:00",
+                "metadata": {},
+                "phase": "recovery",
+                "recorded_status": "succeeded",
+                "span_id": "eval_5eb06ee7763a43b4b262b934d1a00676",
+                "started_at": "2026-07-17T00:26:07.119060+00:00",
+                "status": "succeeded"
+              },
+              {
+                "attempt_no": 2,
+                "duration_ms": 4.839,
+                "error_message": null,
+                "finished_at": "2026-07-17T00:26:07.130111+00:00",
+                "metadata": {},
+                "phase": "advance_plan_item",
+                "recorded_status": "succeeded",
+                "span_id": "eval_bbbd147d63c94133bd0b95f199cafd3a",
+                "started_at": "2026-07-17T00:26:07.125272+00:00",
+                "status": "succeeded"
+              }
+            ],
+            "recorded_status": "succeeded",
+            "span_id": "eval_61babedfc54f4c80bc9a80878b4b3c0c",
+            "started_at": "2026-07-17T00:26:07.114529+00:00",
+            "status": "succeeded"
+          }
+        ],
+        "plan_item_id": "step_0",
+        "step_index": 0
+      },
+      {
+        "attempts": [
+          {
+            "attempt_no": 1,
+            "duration_ms": 11.025,
+            "error_message": null,
+            "finished_at": "2026-07-17T00:26:07.142091+00:00",
+            "metadata": {
+              "script_length": 2
+            },
+            "phase": "step_total",
+            "phases": [
+              {
+                "attempt_no": 1,
+                "duration_ms": 0.7739999999999999,
+                "error_message": null,
+                "finished_at": "2026-07-17T00:26:07.132353+00:00",
+                "metadata": {},
+                "phase": "llm_generate",
+                "recorded_status": "succeeded",
+                "span_id": "eval_b1bb5ad7d14948108c7c374cddc10eed",
+                "started_at": "2026-07-17T00:26:07.131579+00:00",
+                "status": "succeeded"
+              },
+              {
+                "attempt_no": 1,
+                "duration_ms": 4.09,
+                "error_message": null,
+                "finished_at": "2026-07-17T00:26:07.136659+00:00",
+                "metadata": {},
+                "phase": "record_final_message",
+                "recorded_status": "succeeded",
+                "span_id": "eval_d8c63ea075da4ac4b85b600d052cf64a",
+                "started_at": "2026-07-17T00:26:07.132569+00:00",
+                "status": "succeeded"
+              },
+              {
+                "attempt_no": 1,
+                "duration_ms": 4.674,
+                "error_message": null,
+                "finished_at": "2026-07-17T00:26:07.141686+00:00",
+                "metadata": {},
+                "phase": "advance_plan_item",
+                "recorded_status": "succeeded",
+                "span_id": "eval_cb238233bb0043b69b8bcfa9985e44e7",
+                "started_at": "2026-07-17T00:26:07.137012+00:00",
+                "status": "succeeded"
+              }
+            ],
+            "recorded_status": "succeeded",
+            "span_id": "eval_ee4729ffcc7745b2a91c337a7d127eae",
+            "started_at": "2026-07-17T00:26:07.131066+00:00",
+            "status": "succeeded"
+          }
+        ],
+        "plan_item_id": "step_0",
+        "step_index": 1
+      }
+    ]
+  },
+  "resume_exit_code": 0,
+  "run_id": "sample-openrouter-mock-crash-e2e-1784247966",
+  "runtime_dir": "data/demo_ambiguous",
+  "soft_log_path": "data/demo_ambiguous/synthetic_soft_log.json",
+  "target_store_path": "data/demo_ambiguous/openrouter_mock_target.json"
+}

@@ -1,0 +1,12 @@
+$ pytest -q
+.............................................                            [100%]
+45 passed in 0.23s
+
+$ ruff check .
+All checks passed!
+
+$ mypy src
+Success: no issues found in 33 source files
+
+$ python -m py_compile example/*.py
+examples compile ok

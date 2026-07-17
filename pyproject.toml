@@ -1,0 +1,65 @@
+[project]
+name = "raef"
+version = "0.2.0"
+description = "Reliable Agent Execution Framework: crash-durable, replay-safe tool execution for LLM agents"
+readme = "README.md"
+requires-python = ">=3.12"
+license = { text = "MIT" }
+authors = [{ name = "Karthikeyan Kumaraguruparan" }]
+keywords = ["agents", "llm", "fault-tolerance", "write-ahead-log", "idempotency", "recovery"]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Intended Audience :: Developers",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Topic :: Software Development :: Libraries :: Python Modules",
+]
+# The core runtime is intentionally dependency-free: persistence is stdlib
+# sqlite3, hashing is hashlib, serialization is json. Integrations that need
+# third-party packages are opt-in extras below.
+dependencies = []
+
+[project.optional-dependencies]
+http = [
+  "requests>=2.31",   # recovery.health.http_checker
+]
+mcp = [
+  "mcp>=1.0",         # tools.mock_target_mcp FastMCP server
+]
+dev = [
+  "pytest>=8.0",
+  "ruff>=0.6",
+  "mypy>=1.0",
+]
+
+[project.scripts]
+raef = "raef.cli:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/raef"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.ruff]
+target-version = "py312"
+line-length = 120
+
+[tool.ruff.lint.per-file-ignores]
+# Examples prepend src/ to sys.path before importing raef, so imports cannot
+# be at the very top of the file.
+"example/*.py" = ["E402"]
+
+[tool.mypy]
+python_version = "3.12"
+warn_unused_ignores = true
+warn_redundant_casts = true
+no_implicit_optional = true
+
+[[tool.mypy.overrides]]
+module = "mcp.*"
+ignore_missing_imports = true

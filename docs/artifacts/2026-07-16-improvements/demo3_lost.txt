@@ -1,0 +1,52 @@
+Starting crash/recovery end-to-end demo
+Run id: sample-openrouter-mock-crash-e2e-1784247967
+Runtime directory: data/demo_lost_write
+Cleaning previous runtime directory: data/demo_lost_write
+Runtime directory is ready
+Writing synthetic soft log: data/demo_lost_write/synthetic_soft_log.json
+Target store path: data/demo_lost_write/openrouter_mock_target.json
+Crash will be injected at step 0, phase after_tool_transaction
+Launching first agent process; its output will stream below
+Child process started (crash run)
+Child run id: sample-openrouter-mock-crash-e2e-1784247967
+Child runtime directory: data/demo_lost_write
+Logging service initialized
+Crash simulator armed for step 0
+Invoking sample OpenRouter mock agent
+Mock LLM output for step 0:
+{"kind": "tool_call", "tool_call": {"arguments": {"action_name": "set_value", "payload": {"key": "orders/RA512", "value": {"flight_no": "RA512", "status": "booked"}}}, "name": "apply-action", "operation_type": "WRITE", "rationale": "Book the selected flight."}}
+ambiguous write marked pending_recovery: execution_id=exec_5ad70499fcd0e80bd91d3af5 tool=apply-action error=request lost in flight; target never observed the write
+Simulated crash raised: Simulated crash at step=0 phase=after_tool_transaction
+Building partial evaluation report after crash
+Child process crashed for run id: sample-openrouter-mock-crash-e2e-1784247967
+Crash message: Simulated crash at step=0 phase=after_tool_transaction
+Current attempt timeline:
+  step=0 attempt=1 status=interrupted phase=step_total
+First process exited with code 42
+Simulated crash confirmed; now restarting the agent with the same run id
+Launching resumed agent process; recovery output will stream below
+Child process started (resume run)
+Child run id: sample-openrouter-mock-crash-e2e-1784247967
+Child runtime directory: data/demo_lost_write
+Logging service initialized
+Crash simulator disabled for resumed run
+Invoking sample OpenRouter mock agent
+Mock LLM output for step 0:
+{"kind": "tool_call", "tool_call": {"arguments": {"action_name": "set_value", "payload": {"key": "orders/RA512", "value": {"flight_no": "RA512", "status": "booked"}}}, "name": "apply-action", "operation_type": "WRITE", "rationale": "Book the selected flight."}}
+Mock LLM output for step 1:
+{"final": {"answer": "Booked RA512.", "stop_reason": "completed"}, "kind": "final"}
+Agent completed without crashing
+Child result status: complete
+Resumed process exited with code 0
+Building recovery evaluation report
+Wrote evaluation summary JSON: data/demo_lost_write/evaluation_summary.json
+Wrote timing report: data/demo_lost_write/evaluation_timing.txt
+Demo completed successfully
+Latest recovered event sequence: 28
+Inference log: data/demo_lost_write/openrouter_mock_inference.jsonl
+Evaluation summary: data/demo_lost_write/evaluation_summary.json
+Timing report: data/demo_lost_write/evaluation_timing.txt
+Recovered attempt timeline:
+  step 0, attempt 1: status=interrupted, phase=step_total, duration_ms=16.433
+  step 0, attempt 2: status=succeeded, phase=step_total, duration_ms=14.724
+  step 1, attempt 1: status=succeeded, phase=step_total, duration_ms=11.214

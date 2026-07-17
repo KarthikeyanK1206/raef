@@ -1,0 +1,36 @@
+# Python
+__pycache__/
+*.py[cod]
+*.so
+.venv/
+*.egg-info/
+
+# Tooling caches
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Local env
+.env
+.env.*
+!.env.example
+
+# Runtime artifacts (regenerable; never commit)
+data/
+*.sqlite
+*.sqlite3
+*.sqlite-wal
+*.sqlite-shm
+
+# OS/editor
+.DS_Store
+.vscode/
+.idea/
+
+# Local scratch
+local/
+local*
+
+# Course report/presentation (superseded claims; kept local only)
+ft-agent-report.odt
+RIFL-Agent-presentation.pdf
